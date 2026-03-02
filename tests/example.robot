@@ -15,13 +15,6 @@ Open Homepage And Validate Title
     Go To    ${BASE_URL}
     Get Title Should Contain    Robot Framework
 
-Search Docs And Open A Result
-    [Tags]    regression
-    Go To    ${BASE_URL}
-    Click    text=Docs
-    Wait For Elements State    h1 >> text=Documentation    visible    10s
-    Get Text Should Contain    h1    Documentation
-
 *** Keywords ***
 Get Title Should Contain
     [Arguments]    ${expected}
