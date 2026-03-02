@@ -1,23 +1,13 @@
 *** Settings ***
-Documentation     Example suite using Robot Framework Browser (Playwright).
-Library           Browser
-Resource          resources/keywords.resource
-Suite Setup       Open Test Browser
-Suite Teardown    Close All Browsers
-Test Teardown     Take Screenshot On Failure
+Library    Browser
 
 *** Variables ***
-${BASE_URL}       https://robotframework.org/
+${URL}    https://www.python.org/
 
 *** Test Cases ***
-Open Homepage And Validate Title
-    [Tags]    smoke
-    Go To    ${BASE_URL}
-    Get Title Should Contain    Robot Framework
-
-*** Keywords ***
-Get Title Should Contain
-    [Arguments]    ${expected}
-    ${title}=    Get Title
-    Should Contain    ${title}    ${expected}
-    Browser.Close Browser 
+Open Example Page And Verify Title
+    New Browser    chromium
+    New Context
+    New Page    ${URL}
+    Get Title    ==    Welcome to Python.org
+    Close Browser
