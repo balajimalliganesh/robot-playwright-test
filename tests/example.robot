@@ -20,3 +20,4 @@ Get Title Should Contain
     [Arguments]    ${expected}
     ${title}=    Get Title
     Should Contain    ${title}    ${expected}
+    Browser.Close Browser 
