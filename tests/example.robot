@@ -9,5 +9,7 @@ Open Example Page And Verify Title
     New Browser    chromium
     New Context
     New Page    ${URL}
-    Get Title    ==    WWWelcome to Python.org
+    Get Title    ==    Welcome to Python.org
+    Wait For Elements State    text=Functions Defined    visible
+    Get Text    h1    ==    Functions Defined
     Close Browser
