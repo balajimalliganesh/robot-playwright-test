@@ -1,0 +1,68 @@
+name: RobotFramework with Playwright (Browser lib)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    env:
+      # Make Robot outputs predictable for artifact upload
+      RF_OUTPUT_DIR: output
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Set up Node (for Playwright/Browser library)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Initialize robotframework-browser (installs Playwright & browsers)
+        run: |
+          rfbrowser init
+        # If you want to restrict browser installs to chromium only:
+        # run: rfbrowser init --browser chromium
+
+      # (Optional) Install system deps for Playwright on Ubuntu, usually covered by rfbrowser init
+      # - name: Install Playwright system deps
+      #   run: npx playwright install-deps
+
+      - name: Run Robot tests (headless)
+        run: |
+          mkdir -p ${RF_OUTPUT_DIR}
+          robot --outputdir ${RF_OUTPUT_DIR} tests
+
+      - name: Upload Robot artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: robot-artifacts
+          path: |
+            ${RF_OUTPUT_DIR}/log.html
+            ${RF_OUTPUT_DIR}/report.html
+            ${RF_OUTPUT_DIR}/output.xml
+            ${RF_OUTPUT_DIR}/**/*.png
+            ${RF_OUTPUT_DIR}/**/*.webm
+          retention-days: 7
