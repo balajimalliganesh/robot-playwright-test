@@ -9,5 +9,5 @@ Open Example Page And Verify Title
     New Browser    chromium
     New Context
     New Page    ${URL}
-    Get Title    ==    Welcome to Python.org
+    Get Title    ==    WWWelcome to Python.org
     Close Browser
